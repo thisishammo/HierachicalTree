@@ -1,0 +1,27 @@
+import Config
+
+# We don't run a server during test. If one is required,
+# you can enable the server option below.
+config :awesome_backend, AwesomeBackendWeb.Endpoint,
+  http: [ip: {127, 0, 0, 1}, port: 4002],
+  secret_key_base: System.get_env("SECRET_KEY_BASE") || "test_secret_key_base",
+  server: false
+
+# In test we don't send emails
+config :awesome_backend, AwesomeBackend.Mailer, adapter: Swoosh.Adapters.Test
+
+# Disable swoosh api client as it is only required for production adapters
+config :swoosh, :api_client, false
+
+# Print only warnings and errors during test
+config :logger, level: :warning
+
+# Initialize plugs at runtime for faster test compilation
+config :phoenix, :plug_init_mode, :runtime
+
+config :awesome_backend, AwesomeBackend.Repo,
+  username: System.get_env("DB_USERNAME") || "postgres",
+  password: System.get_env("DB_PASSWORD") || "postgres",
+  hostname: System.get_env("DB_HOSTNAME") || "localhost",
+  database: System.get_env("DB_NAME") || "awesome_backend_test",
+  pool: Ecto.Adapters.SQL.Sandbox
