@@ -62,7 +62,7 @@ const EmployeeModal: React.FC<EmployeeModalProps> = ({ employee, isOpen, onClose
           </button>
 
           {/* Edit/Delete Buttons */}
-          <div className="absolute top-4 left-4 flex gap-2">
+          <div className="flex flex-row top-4 left-4 gap-2">
             {onEdit && (
               <button
                 onClick={onEdit}

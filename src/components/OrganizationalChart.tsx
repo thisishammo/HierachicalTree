@@ -453,7 +453,7 @@ const OrganizationalChart = () => {
   return (
     <div className="w-full h-screen relative">
       {/* Add Employee Button */}
-      <div className="absolute top-4 left-4 z-10 flex space-x-2">
+      <div className="absolute left-4 top-36 z-20 flex space-x-2">
         <button
           onClick={openAddModal}
           className="bg-primary text-primary-foreground px-4 py-2 rounded-lg shadow-lg hover:bg-primary/90 transition-colors flex items-center space-x-2"

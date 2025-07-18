@@ -410,8 +410,7 @@ const AddEmployeeModal: React.FC<AddEmployeeModalProps> = ({
                   onChange={(e) => handleInputChange('startDate', e.target.value)}
                   className={`w-full p-3 border rounded-lg bg-background text-foreground ${
                     errors.startDate ? 'border-destructive' : 'border-border'
-                  }`}
-                />
+                  }`}/>
                 {errors.startDate && (
                   <p className="text-sm text-destructive mt-1">{errors.startDate}</p>
                 )}
@@ -421,17 +420,10 @@ const AddEmployeeModal: React.FC<AddEmployeeModalProps> = ({
 
           {/* Submit Button */}
           <div className="flex justify-end space-x-3 pt-4 border-t border-border">
-            <button
-              type="button"
-              onClick={onClose}
-              className="px-6 py-2 border border-border rounded-lg text-foreground hover:bg-muted transition-colors"
-            >
+            <button type="button" onClick={onClose} className="px-6 py-2 border border-border rounded-lg text-foreground hover:bg-muted transition-colors">
               Cancel
             </button>
-            <button
-              type="submit"
-              className="px-6 py-2 bg-primary text-primary-foreground rounded-lg hover:bg-primary/90 transition-colors flex items-center space-x-2"
-            >
+            <button type="submit" className="px-6 py-2 bg-primary text-primary-foreground rounded-lg hover:bg-primary/90 transition-colors flex items-center space-x-2">
               <Plus className="w-4 h-4" />
               <span>{isEdit ? 'Save Changes' : 'Add Employee'}</span>
             </button>
