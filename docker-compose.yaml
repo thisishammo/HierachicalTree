@@ -1,0 +1,43 @@
+version: '3.8'
+
+services:
+  app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    image: puzzle/hierarchical-tree:latest
+    environment:
+      - TASK_ID=${TASK-ID}
+      - DB_HOSTNAME=postgres
+      - DB_USERNAME=postgres
+      - DB_PASSWORD=postgres
+      - DB_NAME=awesome_backend_test
+      - SECRET_KEY_BASE=test_secret_key_base_for_docker_testing_only
+    depends_on:
+      - postgres
+    networks:
+      - test-network
+
+  postgres:
+    image: postgres:13-alpine
+    environment:
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=postgres
+      - POSTGRES_DB=awesome_backend_test
+    volumes:
+      - postgres-data:/var/lib/postgresql/data
+    networks:
+      - test-network
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+
+networks:
+  test-network:
+    driver: bridge
+
+volumes:
+  postgres-data:
+
