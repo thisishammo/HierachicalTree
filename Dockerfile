@@ -20,29 +20,33 @@ RUN mix local.hex --force && \
 COPY backend/mix.exs backend/mix.lock ./backend/
 COPY package.json package-lock.json* ./
 
-# Install backend dependencies (including test dependencies)
+# Install backend dependencies
 WORKDIR /app/backend
-RUN mix deps.get && \
+RUN mix deps.get --only prod && \
     mix deps.compile
 
 # Install frontend dependencies
 WORKDIR /app
 RUN npm ci --legacy-peer-deps || npm install
 
-# Copy test runner script and make it executable (before user change)
-COPY run_tests.sh /app/run_tests.sh
-RUN chmod +x /app/run_tests.sh
-
 # Copy project files
 COPY . .
 
-# Compile backend
+# Build frontend assets
+RUN npm run build
+
+# Compile backend for production
 WORKDIR /app/backend
+ENV MIX_ENV=prod
 RUN mix compile
 
 # Create non-root user for security
 RUN addgroup -g 1000 appuser && \
     adduser -D -u 1000 -G appuser appuser
+
+# Copy startup script and make it executable (before user change)
+COPY start.sh /app/start.sh
+RUN chmod +x /app/start.sh
 
 # Change ownership of app directory
 RUN chown -R appuser:appuser /app
@@ -53,6 +57,13 @@ USER appuser
 # Set working directory
 WORKDIR /app
 
-# Set entrypoint to test runner
-ENTRYPOINT ["/app/run_tests.sh"]
+# Expose the port Phoenix runs on
+EXPOSE 4000
+
+# Set environment to production
+ENV MIX_ENV=prod
+ENV PHX_SERVER=true
+
+# Set entrypoint to start script
+ENTRYPOINT ["/app/start.sh"]
 
